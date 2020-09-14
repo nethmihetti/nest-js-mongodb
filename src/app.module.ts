@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import {CompanyModule} from "./schemas/company.module";
+import {CompanyController} from "./controllers/company.controller";
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [MongooseModule.forRoot(`mongodb+srv://dbUser:N1qaz2wsx@clusterddsbackend.dathe.mongodb.net/company_db_v1?retryWrites=true&w=majority`), CompanyModule],
 })
 export class AppModule {}
