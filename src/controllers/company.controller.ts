@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CompanyService } from '../services/company.service';
 import { Company } from '../schemas/company.schema';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CompanyInsertDto } from '../dto/company-insert.dto';
+import { AddEmployeeToCompanyDto } from '../dto/add-employee-to-company.dto';
 
 @Controller('/company')
 @ApiTags('companies')
@@ -34,5 +35,12 @@ export class CompanyController {
   async deleteCompanyById(@Param('id') id: string): Promise<boolean> {
     return await this.companyService.deleteCompanyBy(id);
   }
+
+  @Patch()
+  @ApiOperation({ summary: 'Add employee to the company'})
+  async addEmployeeToCompany(@Body() body: AddEmployeeToCompanyDto): Promise<Company> {
+    return await this.companyService.updateCompanyWithEmployee(body);
+  }
+
 
 }

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Employee } from './employee.schema';
 
 @Schema()
 export class Company extends Document {
@@ -7,7 +8,13 @@ export class Company extends Document {
   name: string;
 
   @Prop()
-  location: string
+  location: string;
+
+  @Prop()
+  createdAt: Date;
+
+  @Prop()
+  employees: Employee[];
 
 }
 
