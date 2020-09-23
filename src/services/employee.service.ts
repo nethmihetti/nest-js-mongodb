@@ -9,7 +9,7 @@ export class EmployeeService {
   constructor(@InjectModel(Employee.name) private readonly employeeModel: Model<Employee>) { }
 
   async createEmployee(empBody: EmployeeInsertDto): Promise<Employee> {
-    const newEmp = new this.employeeModel({ first_name: empBody.first_name, second_name: empBody.second_name, birth_date: empBody.birth_date });
+    const newEmp = new this.employeeModel({ first_name: empBody.first_name, second_name: empBody.second_name, birth_date: empBody.birth_date, company: null });
     return newEmp.save();
   }
 

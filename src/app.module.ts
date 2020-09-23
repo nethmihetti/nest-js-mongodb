@@ -2,10 +2,13 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CompanyModule } from './schemas/company.module';
 import { EmployeeModule } from './schemas/employee.module';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Module({
   imports: [
-    MongooseModule.forRoot(`mongodb+srv://dbUser:N1qaz2wsx@clusterddsbackend.dathe.mongodb.net/company_db_v1?retryWrites=true&w=majority`),
+    MongooseModule.forRoot(process.env.DATABASE_URL),
     CompanyModule,
     EmployeeModule,
   ],
