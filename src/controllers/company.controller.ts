@@ -3,7 +3,7 @@ import { CompanyService } from '../services/company.service';
 import { Company } from '../schemas/company.schema';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CompanyInsertDto } from '../dto/company-insert.dto';
-import { AddEmployeeToCompanyDto } from '../dto/add-employee-to-company.dto';
+import { AddEmployeesToCompanyDto } from '../dto/add-employees-to-company.dto';
 
 @Controller('/company')
 @ApiTags('companies')
@@ -38,7 +38,7 @@ export class CompanyController {
 
   @Patch()
   @ApiOperation({ summary: 'Add employee to the company'})
-  async addEmployeeToCompany(@Body() body: AddEmployeeToCompanyDto): Promise<Company> {
+  async addEmployeeToCompany(@Body() body: AddEmployeesToCompanyDto): Promise<Company> {
     return await this.companyService.updateCompanyWithEmployee(body);
   }
 

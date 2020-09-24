@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Company } from '../schemas/company.schema';
 import { Model } from 'mongoose';
 import { CompanyInsertDto } from '../dto/company-insert.dto';
-import { AddEmployeeToCompanyDto } from '../dto/add-employee-to-company.dto';
+import { AddEmployeesToCompanyDto } from '../dto/add-employees-to-company.dto';
 import { Employee } from '../schemas/employee.schema';
 
 @Injectable()
@@ -29,24 +29,30 @@ export class CompanyService {
     return await this.companyModel.deleteOne({ '_id': id});
   }
 
-  async updateCompanyWithEmployee(body: AddEmployeeToCompanyDto): Promise<Company> {
+  async updateCompanyWithEmployee(body: AddEmployeesToCompanyDto): Promise<Company> {
     const comp = await this.companyModel.find({ '_id': body.companyId});
-    const emp = await this.employeeModel.find({ '_id': body.employeeId});
+    const empAry = [];
+    for (const empId of body.employeeIds) {
+      const emp = await this.employeeModel.find({ '_id': empId});
+      empAry.push(emp)
+    }
 
     const company = comp[0];
-    const employee = emp[0];
 
-    if (company && employee) {
-      if (company.employees) {
-        company.employees.indexOf(employee._id) === -1 ? company.employees.push(employee._id) : null;
-      } else {
-        company.employees = [employee._id];
+    if (company && empAry.length === body.employeeIds.length) {
+      for(const employeeSubAry of empAry) {
+        const employee = employeeSubAry[0];
+        if (company.employees) {
+          company.employees.indexOf(employee._id) === -1 ? company.employees.push(employee._id) : null;
+        } else {
+          company.employees = [employee._id];
+        }
+
+        employee.company = company;
+
+        await this.employeeModel.updateOne({'_id': employee._id}, employee);
       }
-
-      employee.company = company;
-
-      await this.employeeModel.updateOne({ '_id': body.employeeId }, employee);
-      return await this.companyModel.updateOne({ '_id': body.companyId}, company);
+      return await this.companyModel.updateOne({'_id': body.companyId}, company);
     }
 
     return null;
